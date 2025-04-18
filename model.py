@@ -9,7 +9,7 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # Configure Gemini API
-genai.configure(api_key="AIzaSyDys4pUYn7SJUoG1ijlRIn6LktG0r3zdoI")
+genai.configure(api_key=GOOGLE_API_KEY)
 
 # Initialize the Gemini Flash model
 model = genai.GenerativeModel(model_name="gemini-2.0-flash")
