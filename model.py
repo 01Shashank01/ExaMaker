@@ -14,19 +14,28 @@ genai.configure(api_key=GOOGLE_API_KEY)
 # Initialize the Gemini Flash model
 model = genai.GenerativeModel(model_name="gemini-2.0-flash")
 
-def generate_question_paper(context, question_requirements):
+def generate_question_paper(context, question_requirements, difficulty="easy"):
     # Build prompt based on user requirements
-    prompt = "You are a smart exam assistant. Based on the following study material, generate an exam-style question paper containing:\n\n"
+    prompt = (
+        "You are a smart exam assistant. Based on the following study material, "
+        f"generate an exam-style question paper with a {difficulty} difficulty level.\n\n"
+        "Include:\n"
+    )
 
     for q_type, config in question_requirements.items():
         count = config.get("count", 0)
         marks = config.get("marks", None)
-        if marks:
-            prompt += f"{count} {q_type} questions ({marks} marks each)\n"
-        else:
-            prompt += f"{count} {q_type} questions\n"
+        if count > 0:
+            if marks:
+                prompt += f"- {count} {q_type} questions ({marks} marks each)\n"
+            else:
+                prompt += f"- {count} {q_type} questions\n"
 
-    prompt += f"\nStudy Material:\n\"\"\"{context}\"\"\"\n\nReturn the question paper in clearly labeled sections."
+    prompt += (
+        "\nStudy Material:\n"
+        f"\"\"\"\n{context}\n\"\"\"\n\n"
+        "Return the question paper in clearly labeled sections."
+    )
 
     try:
         response = model.generate_content(prompt)
@@ -53,6 +62,6 @@ It generally involves the intake of carbon dioxide and the release of oxygen. Th
     }
 
     print("🧠 Generating Question Paper...")
-    result = generate_question_paper(sample_context, sample_requirements)
+    result = generate_question_paper(sample_context, sample_requirements, difficulty="intermediate")
     print("\n📄 Generated Question Paper:\n")
     print(result)
