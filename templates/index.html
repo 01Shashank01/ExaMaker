@@ -11,10 +11,16 @@
   <div class="max-w-5xl mx-auto px-6 py-10">
     <h1 class="text-4xl font-bold text-center mb-8 text-blue-700">📄 Question Paper Generator</h1>
 
-    <form action="/" method="POST" class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
+    <form action="/" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
       <div>
         <label class="block font-semibold mb-2">Enter Study Material</label>
-        <textarea name="context" rows="6" required class="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring focus:ring-blue-200">{{ context or '' }}</textarea>
+        <textarea name="context" rows="6" class="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring focus:ring-blue-200">{{ context or '' }}</textarea>
+        <p class="text-sm text-gray-500 mt-2">Optional: If a PDF is uploaded below, this text will be ignored.</p>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-2">📎 Upload PDF (optional)</label>
+        <input type="file" name="pdf_file" accept="application/pdf" class="w-full p-2 border border-gray-300 rounded-lg bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition"/>
       </div>
 
       <h2 class="text-xl font-bold mt-6 mb-2">Customize Question Types</h2>
@@ -44,8 +50,16 @@
     <div class="bg-white mt-10 p-6 rounded-2xl shadow-xl border border-blue-100">
       <h2 class="text-2xl font-bold mb-4 text-green-700">✅ Generated Question Paper</h2>
       <pre class="whitespace-pre-wrap text-gray-800 text-lg">{{ question_paper }}</pre>
+
+      <!-- PDF Download Form -->
+      <form action="/download-pdf" method="POST" class="mt-6">
+        <input type="hidden" name="pdf_content" value="{{ question_paper }}">
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-medium transition">⬇ Download as PDF</button>
+      </form>
     </div>
     {% endif %}
   </div>
+
 </body>
 </html>
+
