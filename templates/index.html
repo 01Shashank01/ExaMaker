@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Question Paper Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-900">
+
+  <div class="max-w-5xl mx-auto px-6 py-10">
+    <h1 class="text-4xl font-bold text-center mb-8 text-blue-700">📄 Question Paper Generator</h1>
+
+    <form action="/" method="POST" class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
+      <div>
+        <label class="block font-semibold mb-2">Enter Study Material</label>
+        <textarea name="context" rows="6" required class="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring focus:ring-blue-200">{{ context or '' }}</textarea>
+      </div>
+
+      <h2 class="text-xl font-bold mt-6 mb-2">Customize Question Types</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for label, name in [
+          ('Fill in the blanks', 'fill'),
+          ('One-word answers', 'oneword'),
+          ('True/False', 'tf'),
+          ('Short answers', 'short'),
+          ('Long answers', 'long')
+        ] %}
+        <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+          <h3 class="font-semibold text-lg text-blue-600 mb-2">{{ label }}</h3>
+          <label class="block mb-1 text-sm font-medium">Number of Questions</label>
+          <input type="number" name="{{ name }}_count" min="0" value="0" class="w-full border border-gray-300 p-2 rounded-lg mb-2" />
+
+          <label class="block mb-1 text-sm font-medium">Marks per Question</label>
+          <input type="number" name="{{ name }}_marks" min="0" value="0" class="w-full border border-gray-300 p-2 rounded-lg" />
+        </div>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl mt-6 transition duration-300 w-full">Generate Question Paper</button>
+    </form>
+
+    {% if question_paper %}
+    <div class="bg-white mt-10 p-6 rounded-2xl shadow-xl border border-blue-100">
+      <h2 class="text-2xl font-bold mb-4 text-green-700">✅ Generated Question Paper</h2>
+      <pre class="whitespace-pre-wrap text-gray-800 text-lg">{{ question_paper }}</pre>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
