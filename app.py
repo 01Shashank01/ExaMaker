@@ -16,14 +16,17 @@ def extract_text_from_pdf(pdf_file):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        # Check if PDF file was uploaded
+        # Get uploaded PDF or text area content
         if 'pdf_file' in request.files and request.files['pdf_file'].filename != '':
             pdf_file = request.files['pdf_file']
             context = extract_text_from_pdf(pdf_file)
         else:
             context = request.form.get('context', '')
 
-        # Collect user-defined question requirements from form
+        # Get difficulty level
+        difficulty = request.form.get('difficulty', 'easy')
+
+        # Gather question configuration
         question_requirements = {
             "Fill in the blanks": {
                 "count": int(request.form.get('fill_count', 0)),
@@ -47,7 +50,9 @@ def home():
             }
         }
 
-        question_paper = generate_question_paper(context, question_requirements)
+        # Generate the question paper using the difficulty
+        question_paper = generate_question_paper(context, question_requirements, difficulty=difficulty)
+
         return render_template('index.html', context=context, question_paper=question_paper)
 
     return render_template('index.html')
@@ -67,4 +72,3 @@ def download_pdf():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
