@@ -16,13 +16,15 @@
       <!-- Notes Selection -->
       <div>
         <label class="block font-semibold mb-2">Select Subject</label>
-        <select id="subject-select" name="subject" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-200" onchange="populateChapters()">
-          <option value="">-- Select a Subject --</option>
-          <option value="Compiler Design CS603">Compiler Design CS603</option>
-          <option value="Computer Networking CS602">Computer Networking CS602</option>
-          <option value="Machine Learning CS601">Machine Learning CS601</option>
-          <option value="Project Management CS604">Project Management CS604</option>
-        </select>
+        <!-- SUBJECT SELECTION (UNDERSCORE FORMAT) -->
+<select id="subject-select" name="subject" class="..." onchange="populateChapters()">
+  <option value="">-- Select a Subject --</option>
+  <option value="Compiler_Design_CS603">Compiler Design CS603</option>
+  <option value="Computer_Networking_CS602">Computer Networking CS602</option>
+  <option value="Machine_Learning_CS601">Machine Learning CS601</option>
+  <option value="Project_Management_CS604">Project Management CS604</option>
+</select>
+
       </div>
 
       <div>
@@ -91,12 +93,13 @@
   </div>
 
   <script>
-    const chaptersData = {
-      "Compiler Design CS603": 5,
-      "Computer Networking CS602": 5,
-      "Machine Learning CS601": 5,
-      "Project Management CS604": 3
-    };
+   const chaptersData = {
+  "Compiler_Design_CS603": 5,
+  "Computer_Networking_CS602": 5,
+  "Machine_Learning_CS601": 5,
+  "Project_Management_CS604": 3
+};
+
 
     function populateChapters() {
       const subject = document.getElementById('subject-select').value;
@@ -107,7 +110,7 @@
         const count = chaptersData[subject];
         for (let i = 1; i <= count; i++) {
           const option = document.createElement('option');
-          option.value = `Chapter ${i}`;
+          option.value = `Chapter_${i}`;
           option.textContent = `Chapter ${i}`;
           chapterSelect.appendChild(option);
         }
