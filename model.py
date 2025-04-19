@@ -32,9 +32,14 @@ def generate_question_paper(context, question_requirements, difficulty="easy"):
                 prompt += f"- {count} {q_type} questions\n"
 
     prompt += (
+        "\nGuidelines:\n"
+        "- For MCQs, provide 4 options labeled a, b, c, d and indicate the correct answer.\n"
+        "- Ensure the questions are semantically accurate and contextually aligned.\n"
+        "- Maintain clarity and academic integrity in question framing.\n"
+        "- Avoid ambiguity and ensure answers are traceable to the study material.\n"
         "\nStudy Material:\n"
         f"\"\"\"\n{context}\n\"\"\"\n\n"
-        "Return the question paper in clearly labeled sections."
+        "Return the question paper in clearly labeled sections based on question types."
     )
 
     try:
@@ -58,7 +63,8 @@ It generally involves the intake of carbon dioxide and the release of oxygen. Th
         "One-word answer": {"count": 3, "marks": 1},
         "True/False": {"count": 2, "marks": 1},
         "Short answer": {"count": 2, "marks": 3},
-        "Long answer": {"count": 1, "marks": 5}
+        "Long answer": {"count": 1, "marks": 5},
+        "MCQ": {"count": 3, "marks": 2}
     }
 
     print("🧠 Generating Question Paper...")
