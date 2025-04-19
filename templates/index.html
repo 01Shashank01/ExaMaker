@@ -12,14 +12,33 @@
     <h1 class="text-4xl font-bold text-center mb-8 text-blue-700">📄 Question Paper Generator</h1>
 
     <form action="/" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
+
+      <!-- Notes Selection -->
       <div>
-        <label class="block font-semibold mb-2">Enter Study Material</label>
-        <textarea name="context" rows="6" class="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring focus:ring-blue-200">{{ context or '' }}</textarea>
-        <p class="text-sm text-gray-500 mt-2">Optional: If a PDF is uploaded below, this text will be ignored.</p>
+        <label class="block font-semibold mb-2">Select Subject</label>
+        <select id="subject-select" name="subject" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-200" onchange="populateChapters()">
+          <option value="">-- Select a Subject --</option>
+          <option value="Compiler Design CS603">Compiler Design CS603</option>
+          <option value="Computer Networking CS602">Computer Networking CS602</option>
+          <option value="Machine Learning CS601">Machine Learning CS601</option>
+          <option value="Project Management CS604">Project Management CS604</option>
+        </select>
       </div>
 
       <div>
-        <label class="block font-semibold mb-2">📎 Upload PDF (optional)</label>
+        <label class="block font-semibold mb-2">Select Chapter</label>
+        <select id="chapter-select" name="chapter" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-200" onchange="toggleContext()">
+          <option value="">-- Select a Chapter --</option>
+        </select>
+      </div>
+
+      <!-- Context Block -->
+      <div id="context-block">
+        <label class="block font-semibold mb-2">Enter Study Material</label>
+        <textarea name="context" rows="6" class="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring focus:ring-blue-200">{{ context or '' }}</textarea>
+        <p class="text-sm text-gray-500 mt-2">Optional: If a PDF is uploaded below, this text will be ignored.</p>
+
+        <label class="block font-semibold mt-4 mb-2">📎 Upload PDF (optional)</label>
         <input type="file" name="pdf_file" accept="application/pdf" class="w-full p-2 border border-gray-300 rounded-lg bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition"/>
       </div>
 
@@ -40,7 +59,8 @@
           ('One-word answers', 'oneword'),
           ('True/False', 'tf'),
           ('Short answers', 'short'),
-          ('Long answers', 'long')
+          ('Long answers', 'long'),
+          ('Multiple Choice Questions (MCQ)', 'mcq')
         ] %}
         <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
           <h3 class="font-semibold text-lg text-blue-600 mb-2">{{ label }}</h3>
@@ -69,6 +89,39 @@
     </div>
     {% endif %}
   </div>
+
+  <script>
+    const chaptersData = {
+      "Compiler Design CS603": 5,
+      "Computer Networking CS602": 5,
+      "Machine Learning CS601": 5,
+      "Project Management CS604": 3
+    };
+
+    function populateChapters() {
+      const subject = document.getElementById('subject-select').value;
+      const chapterSelect = document.getElementById('chapter-select');
+      chapterSelect.innerHTML = '<option value="">-- Select a Chapter --</option>';
+
+      if (chaptersData[subject]) {
+        const count = chaptersData[subject];
+        for (let i = 1; i <= count; i++) {
+          const option = document.createElement('option');
+          option.value = `Chapter ${i}`;
+          option.textContent = `Chapter ${i}`;
+          chapterSelect.appendChild(option);
+        }
+      }
+
+      toggleContext();
+    }
+
+    function toggleContext() {
+      const chapter = document.getElementById('chapter-select').value;
+      const contextBlock = document.getElementById('context-block');
+      contextBlock.style.display = chapter ? 'none' : 'block';
+    }
+  </script>
 
 </body>
 </html>
