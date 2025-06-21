@@ -15,11 +15,11 @@ genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel(model_name="gemini-2.0-flash")
 
 def generate_question_paper(context, question_requirements, difficulty="easy"):
-    # Build prompt based on user requirements
+    # Build the prompt
     prompt = (
-        "You are a smart exam assistant. Based on the following study material, "
-        f"generate an exam-style question paper with a {difficulty} difficulty level.\n\n"
-        "Include:\n"
+        "You are an expert exam assistant. Based on the following study material, "
+        f"generate an exam-style question paper of {difficulty} difficulty.\n\n"
+        "Instructions:\n"
     )
 
     for q_type, config in question_requirements.items():
@@ -33,21 +33,35 @@ def generate_question_paper(context, question_requirements, difficulty="easy"):
 
     prompt += (
         "\nGuidelines:\n"
-        "- For MCQs, provide 4 options labeled a, b, c, d and indicate the correct answer.\n"
-        "- Ensure the questions are semantically accurate and contextually aligned.\n"
-        "- Maintain clarity and academic integrity in question framing.\n"
-        "- Avoid ambiguity and ensure answers are traceable to the study material.\n"
+        "- For MCQs, provide 4 options (a, b, c, d) and indicate the correct one.\n"
+        "- Frame questions clearly and align them with the given content.\n"
+        "- Ensure questions are academically appropriate.\n"
+        "- Provide the correct answers below the question paper.\n"
         "\nStudy Material:\n"
         f"\"\"\"\n{context}\n\"\"\"\n\n"
-        "Return the question paper in clearly labeled sections based on question types."
+        "Return the output in two sections:\n"
+        "1. Question Paper\n"
+        "2. Answer Key\n"
     )
 
     try:
         response = model.generate_content(prompt)
-        return response.text
+        output = response.text.strip()
+
+        # Split the output into two parts: questions and answers
+        if "Answer Key" in output:
+            question_part, answer_part = output.split("Answer Key", 1)
+            question_paper = question_part.strip()
+            answer_key = "Answer Key\n" + answer_part.strip()
+        else:
+            question_paper = output
+            answer_key = "❌ Answer key not found in the response."
+
+        return question_paper, answer_key
+
     except Exception as e:
         print("❌ Error during content generation:", e)
-        return "Failed to generate question paper."
+        return "Failed to generate question paper.", ""
 
 # -------------------------------
 # 🧪 Run this block for testing
@@ -67,7 +81,7 @@ It generally involves the intake of carbon dioxide and the release of oxygen. Th
         "MCQ": {"count": 3, "marks": 2}
     }
 
-    print("🧠 Generating Question Paper...")
-    result = generate_question_paper(sample_context, sample_requirements, difficulty="intermediate")
-    print("\n📄 Generated Question Paper:\n")
-    print(result)
+    print("🧠 Generating Question Paper with Answers...")
+    qp, ak = generate_question_paper(sample_context, sample_requirements, difficulty="intermediate")
+    print("\n📄 Question Paper:\n", qp)
+    print("\n✅ Answer Key:\n", ak)
