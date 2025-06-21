@@ -9,22 +9,20 @@
 <body class="bg-gray-100 min-h-screen text-gray-900">
 
   <div class="max-w-5xl mx-auto px-6 py-10">
-    <h1 class="text-4xl font-bold text-center mb-8 text-blue-700">📄 ExaMaker</h1>
+    <h1 class="text-4xl font-bold text-center mb-8 text-blue-700">📄 Question Paper Generator</h1>
 
     <form action="/" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
 
       <!-- Notes Selection -->
       <div>
         <label class="block font-semibold mb-2">Select Subject</label>
-        <!-- SUBJECT SELECTION (UNDERSCORE FORMAT) -->
-<select id="subject-select" name="subject" class="..." onchange="populateChapters()">
-  <option value="">-- Select a Subject --</option>
-  <option value="Compiler_Design_CS603">Compiler Design CS603</option>
-  <option value="Computer_Networking_CS602">Computer Networking CS602</option>
-  <option value="Machine_Learning_CS601">Machine Learning CS601</option>
-  <option value="Project_Management_CS604">Project Management CS604</option>
-</select>
-
+        <select id="subject-select" name="subject" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-200" onchange="populateChapters()">
+          <option value="">-- Select a Subject --</option>
+          <option value="Compiler Design CS603">Compiler Design CS603</option>
+          <option value="Computer Networking CS602">Computer Networking CS602</option>
+          <option value="Machine Learning CS601">Machine Learning CS601</option>
+          <option value="Project Management CS604">Project Management CS604</option>
+        </select>
       </div>
 
       <div>
@@ -93,13 +91,12 @@
   </div>
 
   <script>
-   const chaptersData = {
-  "Compiler_Design_CS603": 5,
-  "Computer_Networking_CS602": 5,
-  "Machine_Learning_CS601": 5,
-  "Project_Management_CS604": 3
-};
-
+    const chaptersData = {
+      "Compiler Design CS603": 5,
+      "Computer Networking CS602": 5,
+      "Machine Learning CS601": 5,
+      "Project Management CS604": 3
+    };
 
     function populateChapters() {
       const subject = document.getElementById('subject-select').value;
@@ -110,8 +107,8 @@
         const count = chaptersData[subject];
         for (let i = 1; i <= count; i++) {
           const option = document.createElement('option');
-          option.value = `Chapter_${i}`;
-          option.textContent = `Chapter ${i}`;
+          option.value = Chapter ${i};
+          option.textContent = Chapter ${i};
           chapterSelect.appendChild(option);
         }
       }
@@ -128,3 +125,8 @@
 
 </body>
 </html>
+
+
+
+3/3
+
