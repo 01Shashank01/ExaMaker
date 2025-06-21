@@ -37,31 +37,19 @@ def home():
     question_paper = ""
 
     if request.method == 'POST':
-        selected_subject_raw = request.form.get('subject')
-        selected_chapter_raw = request.form.get('chapter')
-
-        # Convert user-friendly names to actual folder names
-        selected_subject = selected_subject_raw.replace(" ", "_") if selected_subject_raw else ""
-        selected_chapter = selected_chapter_raw.replace(" ", "_") if selected_chapter_raw else ""
-
+        selected_subject = request.form.get('subject')
+        selected_chapter = request.form.get('chapter')
         if selected_subject and selected_chapter:
             chapter_file = selected_chapter + ".pdf"
             chapter_path = os.path.join(STATIC_NOTES_PATH, selected_subject, chapter_file)
-            print("📁 Looking for chapter PDF at:", chapter_path)
-
             if os.path.exists(chapter_path):
                 with open(chapter_path, 'rb') as pdf_file:
                     context = extract_text_from_pdf(pdf_file)
-                    print("✅ Extracted context length:", len(context))
-            else:
-                print("❌ PDF file does NOT exist.")
         elif 'pdf_file' in request.files and request.files['pdf_file'].filename != '':
             pdf_file = request.files['pdf_file']
             context = extract_text_from_pdf(pdf_file)
-            print("✅ Extracted from uploaded PDF, length:", len(context))
         else:
             context = request.form.get('context', '')
-            print("✍ Using manually typed context, length:", len(context))
 
         # Difficulty level
         difficulty = request.form.get('difficulty', 'easy')
@@ -94,10 +82,7 @@ def home():
             }
         }
 
-        if context.strip():
-            question_paper = generate_question_paper(context, question_requirements, difficulty=difficulty)
-        else:
-            question_paper = "❌ No valid content found for generating question paper."
+        question_paper = generate_question_paper(context, question_requirements, difficulty=difficulty)
 
     return render_template(
         'index.html',
